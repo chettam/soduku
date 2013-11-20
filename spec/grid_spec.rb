@@ -75,14 +75,14 @@ describe Grid do
 			it "how to find the minimum amount of candidats for a sell" do
 				create_grid
 				cell =grid.search_next_cell
-				grid.get_candidates(cell)
+				grid.update_candidates(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to solve individual cell" do
 				create_grid
 				cell = grid.search_next_cell
-				grid.get_candidates(cell)
+				grid.update_candidates(cell)
 				grid.solve_cell(cell)
 				expect(cell.filled_out?).to be_true
 			end

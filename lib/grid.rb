@@ -47,7 +47,7 @@ class Grid
 			cell.position[:box] = calculate_position_box(index)
 	end
 
-	def get_candidates(origin_cell)
+	def update_candidates(origin_cell)
 			get_horizontal_candidates(origin_cell)
 			get_vertical_candidates(origin_cell)
 			get_box_candidates(origin_cell)
@@ -94,7 +94,7 @@ class Grid
 		while !solved?
 			cell = search_next_cell
 			if !cell.nil?
-				get_candidates(cell)
+				update_candidates(cell)
 				solve_cell(cell)
 			else
 				@solved = true
