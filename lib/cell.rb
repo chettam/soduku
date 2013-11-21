@@ -19,7 +19,8 @@ class Cell
   end
 
   def candidates=(number)
-  	@candidates << number if number.between?(0,9)
+  	@candidates << number if number.between?(1,9)
+
   end
 
   def remove_candidate(number)
@@ -29,6 +30,7 @@ class Cell
   def solve
   	if @candidates.length == 1
   		@value = @candidates.first
+  		@candidates = []
   	end
   end
 

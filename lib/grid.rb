@@ -9,7 +9,7 @@ class Grid
 	attr_reader :cells
 
 	def solved?
-		@sovled
+		@solved
 	end
 
 	def create(puzzle)	
@@ -23,10 +23,14 @@ class Grid
 	end
 
   def search_next_cell
-   	current_cell = cells.detect {|cell| !cell.filled_out?}
-	 	cell = @last_cell == current_cell ? cells.detect {|cell| !cell.filled_out? && cell != @last_cell} : current_cell
+   	current_cell = select_next_cell
+	 	cell = @last_cell == current_cell ? select_next_cell : current_cell
 	 	@last_cell = current_cell
 	 	cell
+	 end
+
+	 def select_next_cell 
+	 	cell = cells.select {|cell| !cell.filled_out?}.sample
 	 end
 
 	def calculate_position_x(index)
@@ -55,27 +59,21 @@ class Grid
 
 
 	def get_horizontal_candidates(origin_cell)		
-			get_initial_candidates(origin_cell)
-		 cells.each do |cell| 
-		 		if cell.position[:x] == origin_cell.position[:x] && cell.filled_out?
-		 			origin_cell.candidates.delete(cell.value)
-		 		end
-		 end
+		get_candidates(origin_cell,"x")
 	end
 
 	def get_vertical_candidates(origin_cell)		
-			get_initial_candidates(origin_cell)
-		 cells.each do |cell| 
-		 		if cell.position[:y] == origin_cell.position[:y] && cell.filled_out?
-		 			origin_cell.candidates.delete(cell.value)
-		 		end
-		 end
+		get_candidates(origin_cell,"y")
 	end
 
 	def get_box_candidates(origin_cell)		
-			get_initial_candidates(origin_cell)
+			get_candidates(origin_cell,"box")
+	end
+
+	def get_candidates(origin_cell,type)
+		get_initial_candidates(origin_cell)
 		 cells.each do |cell| 
-		 		if cell.position[:box] == origin_cell.position[:box] && cell.filled_out?
+		 		if cell.position[type.to_sym] == origin_cell.position[type.to_sym] && cell.filled_out?
 		 			origin_cell.candidates.delete(cell.value)
 		 		end		 		
 		 end
@@ -86,20 +84,25 @@ class Grid
 		(1..9).each {|n| origin_cell.candidates << n}  if origin_cell.candidates == []
 	end
 
+
 	def solve_cell(cell)
+		update_candidates(cell)
+		# puts cell.candidates.inspect
+		# puts cells.map(&:value).inspect
+		# puts cells.map(&:candidates).inspect
 		cell.solve
 	end
 
 	def solve
-		while !solved?
+		until solved?
 			cell = search_next_cell
 			if !cell.nil?
-				update_candidates(cell)
 				solve_cell(cell)
 			else
 				@solved = true
 			end
 		end
+		puts cells.map(&:value).inspect
 	end
 end
 	
