@@ -68,21 +68,21 @@ describe Grid do
 			it "how to find a cell candidate base on a box" do
 				create_grid
 				cell = grid.search_next_cell
-				grid.get_box_candidates(cell)
+				grid.box_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to find the minimum amount of candidats for a sell" do
 				create_grid
 				cell =grid.search_next_cell
-				grid.update_candidates(cell)
+				grid.search_all_candidates(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to solve individual cell" do
 				create_grid
 				cell = grid.search_next_cell
-				grid.update_candidates(cell)
+				grid.search_all_candidates(cell)
 				grid.solve_cell(cell)
 				expect(cell.filled_out?).to be_true
 			end

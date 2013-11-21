@@ -58,29 +58,29 @@ class Grid
 			cell.position[:box] = calculate_position_box(index)
 	end
 
-	def update_candidates(origin_cell)
+	def search_all_candidates(origin_cell)
 			horizontal_candidates_for(origin_cell)
 			vertical_candidates_for(origin_cell)
-			get_box_candidates(origin_cell)
+			box_candidates_for(origin_cell)
 	end
 
 
 	def horizontal_candidates_for(cell)		
-		get_candidates(cell, :x)
+		search_candidates(cell, :x)
 	end
 
 	def vertical_candidates_for(cell)		
-		get_candidates(cell, :y)
+		search_candidates(cell, :y)
 	end
 
-	def get_box_candidates(origin_cell)		
-			get_candidates(origin_cell, :box)
+	def box_candidates_for(cell)		
+		search_candidates(cell, :box)
 	end
 
-	def get_candidates(origin_cell,type)
+	def search_candidates(origin_cell,area)
 		get_initial_candidates(origin_cell)
 		 cells.each do |cell| 
-		 		if cell.same_position_as?(origin_cell, type) && cell.filled_out?
+		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
 		 			origin_cell.candidates.delete(cell.value)
 		 		end		 		
 		 end
@@ -93,7 +93,7 @@ class Grid
 
 
 	def solve_cell(cell)
-		update_candidates(cell)
+		search_all_candidates(cell)
 		cell.solve!
 	end
 
