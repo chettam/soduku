@@ -48,7 +48,7 @@ describe Cell do
 
 		it "how to fill out a cell" do
 			cell.candidates = 2
-			cell.solve
+			cell.solve!
 			expect(cell.filled_out?)
 		end
 

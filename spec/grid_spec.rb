@@ -54,14 +54,14 @@ describe Grid do
 			it "how to find a cell candidate base on an horizontal row" do
 				create_grid
 				cell = grid.search_next_cell
-				grid.get_horizontal_candidates(cell)
+				grid.horizontal_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to find a cell candidate base on an vertical row" do
 				create_grid
 				cell = grid.search_next_cell
-				grid.get_vertical_candidates(cell)
+				grid.vertical_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 

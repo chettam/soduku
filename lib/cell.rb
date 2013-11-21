@@ -1,14 +1,13 @@
 class Cell
 
-	def initialize
-		@value = nil
+	attr_reader :value , :candidates
+	attr_accessor :position
+
+	def initialize(value= nil)
+		@value = value
 		@candidates = []
 		@position = {}
 	end
-
-	attr_reader :value , :candidates
-
-	attr_accessor :position
 
   def value=(value)
     @value = value if value.between?(0,9)
@@ -19,19 +18,19 @@ class Cell
   end
 
   def candidates=(number)
-  	@candidates << number if number.between?(1,9)
-
+  	@candidates << number if number.between?(1,9) # else what? How do I know something happened? do I have to know?
   end
 
   def remove_candidate(number)
   	@candidates.delete(number)
   end
 
-  def solve
-  	if @candidates.length == 1
-  		@value = @candidates.first
-  		@candidates = []
-  	end
+  def solve!
+  	@value = @candidates.delete(@candidates.first) if @candidates.length == 1
+  end
+
+  def same_position_as?(other, direction)
+  	self.position[direction] == other.position[direction]
   end
 
 end
