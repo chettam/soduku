@@ -3,6 +3,11 @@ require_relative '../lib/grid'
 describe Grid do
 		let(:grid) {Grid.new}
 
+		# before(:each) do
+  #   create_grid
+  # 	end
+
+
 		context "should contain" do
 
 			it "cells" do
@@ -30,21 +35,6 @@ describe Grid do
 				grid.create('1')
 				expect(grid.search_next_cell).to be_nil
 			end
-
-			# it "how to calculate x index" do 
-			#  create_grid
-			#  expect(grid.calculate_position_x(10)).to eq(1)
-			# end
-
-			# it "how to calculate y index" do 
-			#  create_grid
-			#  expect(grid.calculate_position_y(10)).to eq(1)
-			# end
-
-			# it "how to calculate box index" do 
-			# 	create_grid
-			# 	expect(grid.calculate_position_box(10)).to eq(0)
-			# end
 
 			it "how to set the position of cells" do
 				create_grid
@@ -93,7 +83,7 @@ describe Grid do
 				cell2 = grid.search_next_cell
 		
 				expect(cell1).to eq(cell2)
-				# expect(cell3).not_to eq(cell2)
+
 			end
 
 			it "if the soduku is solved" do

@@ -1,12 +1,11 @@
 class Grid
 
-	LENGTH = 9
-	BOX_LENGTH = 3
+
 
 	def initialize
 		@cells =[]
 		@solved = false
-		@last_cell = Cell.new
+
 	end
 
 	attr_reader :cells
