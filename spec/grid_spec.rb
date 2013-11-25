@@ -87,7 +87,7 @@ describe Grid do
 			it "how to solve an hard soduku" do
 				#seed = (1..9).to_a.shuffle + Array.new(81-9, 0)
 				seed = ((1..9).to_a + Array.new(81-9, 0)).shuffle.join
-				# seed = "800000000003600000070090200050007000000045700000100030001000068008500010090000400"
+				#seed = "800000000003600000070090200050007000000045700000100030001000068008500010090000400"
 				grid.create(seed)
 				grid.solve
 			  expect(grid.solved?).to be_true

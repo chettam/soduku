@@ -1,5 +1,3 @@
-require 'pry-byebug'
-
 class Grid
 
 		SIZE = 81
@@ -67,17 +65,16 @@ class Grid
 
   def plan_b
     blank_cell = @cells.reject(&:filled_out?).first
-    puts blank_cell.candidates.count
     blank_cell.candidates.each do |candidate|
       blank_cell.assume(candidate)
       grid = replicate!
       grid.solve
       if grid.solved?
 		    steal_solution(grid.to_s)
-		    return true
+		    return
 	  	end
     end
-    nil
+
   end
 
 	def solve_cell(cell)
@@ -95,7 +92,6 @@ class Grid
 			count += 1
 		end
 		if !solved?
-			puts "going to plan B"
 		  plan_b
     	# binding.pry if r
 		end
