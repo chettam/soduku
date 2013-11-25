@@ -1,14 +1,12 @@
 class Grid
 
-
+		attr_reader :cells
 
 	def initialize
 		@cells =[]
 		@solved = false
 
 	end
-
-	attr_reader :cells
 
 	def solved?
 		@solved
@@ -21,31 +19,15 @@ class Grid
 		end
 	end
 
-	def build_cell_with(value)
-		Cell.new value
-	end
-
-  def search_next_cell
-	 	@last_cell = select_cell_unless_last(select_next_cell)
-	 end
-
-	 def select_cell_unless_last(cell)
-	 	@last_cell == cell ? select_next_cell : cell
-	 	cell
-	 end
-
-	 def select_next_cell 
+	def next_cell 
 	 	cells.select {|cell| !cell.filled_out? }.sample
-	 end
-
-
+	end
 
 	def search_all_candidates(origin_cell)
 			horizontal_candidates_for(origin_cell)
 			vertical_candidates_for(origin_cell)
 			box_candidates_for(origin_cell)
 	end
-
 
 	def horizontal_candidates_for(cell)		
 		search_candidates(cell, :x)
@@ -62,13 +44,10 @@ class Grid
 	def search_candidates(origin_cell,area)
 		 cells.each do |cell| 
 		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
-		 			origin_cell.candidates.delete(cell.value)
+		 			origin_cell.remove_candidate(cell.value)
 		 		end		 		
 		 end
 	end
-
-	
-
 
 	def solve_cell(cell)
 		search_all_candidates(cell)
@@ -77,7 +56,7 @@ class Grid
 
 	def solve
 		until solved?
-			cell = search_next_cell
+			cell = next_cell
 			if !cell.nil?
 				solve_cell(cell)
 			else

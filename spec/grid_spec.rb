@@ -28,50 +28,50 @@ describe Grid do
 
 			it "how to find the first unsolved cell" do
 				create_grid
-				expect(grid.search_next_cell).to be_kind_of Cell
+				expect(grid.next_cell).to be_kind_of Cell
 			end
 
 			it "to return nil if there is no unsolved cell" do
 				grid.create('1')
-				expect(grid.search_next_cell).to be_nil
+				expect(grid.next_cell).to be_nil
 			end
 
 			it "how to set the position of cells" do
 				create_grid
-				expect(grid.search_next_cell.position).to eq({:x => 0 ,:y => 0 ,:box =>0})
+				expect(grid.next_cell.position).to eq({:x => 0 ,:y => 0 ,:box =>0})
 			end
 
 			it "how to find a cell candidate base on an horizontal row" do
 				create_grid
-				cell = grid.search_next_cell
+				cell = grid.next_cell
 				grid.horizontal_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to find a cell candidate base on an vertical row" do
 				create_grid
-				cell = grid.search_next_cell
+				cell = grid.next_cell
 				grid.vertical_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to find a cell candidate base on a box" do
 				create_grid
-				cell = grid.search_next_cell
+				cell = grid.next_cell
 				grid.box_candidates_for(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to find the minimum amount of candidats for a sell" do
 				create_grid
-				cell =grid.search_next_cell
+				cell = grid.next_cell
 				grid.search_all_candidates(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to solve individual cell" do
 				create_grid
-				cell = grid.search_next_cell
+				cell = grid.next_cell
 				grid.search_all_candidates(cell)
 				grid.solve_cell(cell)
 				expect(cell.filled_out?).to be_true
@@ -79,8 +79,8 @@ describe Grid do
 
 			it "how to skip tp the next cell if a cell is not solved" do
 				create_grid
-				cell1 = grid.search_next_cell
-				cell2 = grid.search_next_cell
+				cell1 = grid.next_cell
+				cell2 = grid.next_cell
 		
 				expect(cell1).to eq(cell2)
 
