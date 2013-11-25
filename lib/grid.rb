@@ -3,13 +3,13 @@ class Grid
 	LENGTH = 9
 	BOX_LENGTH = 3
 
+	attr_reader :cells
+
 	def initialize
 		@cells =[]
 		@solved = false
 		@last_cell = Cell.new
 	end
-
-	attr_reader :cells
 
 	def solved?
 		@solved
@@ -17,14 +17,10 @@ class Grid
 
 	def create(puzzle)	
 		puzzle.chars.each_with_index do |number, index|
-			cell = build_cell_with(number.to_i)
+			cell = Cell.new number.to_i
 			assign_position(cell,index)
 			cells << cell	
 		end
-	end
-
-	def build_cell_with(value)
-		Cell.new value
 	end
 
   def search_next_cell
@@ -78,18 +74,14 @@ class Grid
 	end
 
 	def search_candidates(origin_cell,area)
-		get_initial_candidates(origin_cell)
-		 cells.each do |cell| 
-		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
-		 			origin_cell.candidates.delete(cell.value)
-		 		end		 		
-		 end
+		cells.each do |cell| 
+				if cell.same_position_as?(origin_cell, area) && cell.filled_out?
+					origin_cell.remove_candidate(cell.value)
+				end		 		
+		end
 	end
 
-	def get_initial_candidates(origin_cell)
-		# WFT MEANS N?!?!?!?
-		(1..LENGTH).each {|n| origin_cell.candidates << n}  if origin_cell.candidates == []
-	end
+
 
 
 	def solve_cell(cell)

@@ -4,12 +4,13 @@ describe Cell do
 	let(:cell) {Cell.new}
 	context "should contain" do
 		
-		it "nil when empty" do
+		it "nil when empty by default" do
 			expect(cell.value).to be_nil
 		end
 
 		it "a value" do
-			expect(cell.value =3).to eq(3)
+			cell.value = 3
+			expect(cell.value).to eq(3)
 		end
 
 		it "a value between 0 and 9" do
@@ -18,8 +19,7 @@ describe Cell do
 		end
 
 		it "potential candidates" do
-			cell.candidates = 2
-			expect(cell.candidates).to eq([2])
+			expect(cell.candidates).to eq([1,2,3,4,5,6,7,8,9])
 		end
 
 		it " cell and box position" do
@@ -31,7 +31,7 @@ describe Cell do
 
 		it "if it is filled out" do
 			cell.value = 2
-			expect(cell.filled_out?).to be_true
+			expect(cell).to be_filled_out
 		end
 
 		it "0 is not a filled out number" do
@@ -40,10 +40,8 @@ describe Cell do
 		end
 
 		it "how to remove a candidate" do
-			cell.candidates = 2
-			cell.candidates = 3
 			cell.remove_candidate(2)
-			expect(cell.candidates).to eq([3])
+			expect(cell.candidates).to eq([1,3,4,5,6,7,8,9])
 		end
 
 		it "how to fill out a cell" do
