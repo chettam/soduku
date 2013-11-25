@@ -1,5 +1,7 @@
 class Grid
 
+		SIZE = 81
+		MAXENUM = 6
 		attr_reader :cells
 
 	def initialize
@@ -9,7 +11,7 @@ class Grid
 	end
 
 	def solved?
-		@solved
+		@cells.all? {|cell| cell.filled_out? }
 	end
 
 	def create(puzzle)	
@@ -20,28 +22,28 @@ class Grid
 	end
 
 	def next_cell 
-	 	cells.select {|cell| !cell.filled_out? }.sample
+	 	cells.select {|cell| !cell.filled_out? }.sample 	
 	end
 
-	def search_all_candidates(origin_cell)
+	def update_candidates(origin_cell)
 			horizontal_candidates_for(origin_cell)
 			vertical_candidates_for(origin_cell)
 			box_candidates_for(origin_cell)
 	end
 
 	def horizontal_candidates_for(cell)		
-		search_candidates(cell, :x)
+		update_candidates_for(cell, :x)
 	end
 
 	def vertical_candidates_for(cell)		
-		search_candidates(cell, :y)
+		update_candidates_for(cell, :y)
 	end
 
 	def box_candidates_for(cell)		
-		search_candidates(cell, :box)
+		update_candidates_for(cell, :box)
 	end
 
-	def search_candidates(origin_cell,area)
+	def update_candidates_for(origin_cell,area)
 		 cells.each do |cell| 
 		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
 		 			origin_cell.remove_candidate(cell.value)
@@ -49,21 +51,42 @@ class Grid
 		 end
 	end
 
+
+  def replicate!
+    self.class.new(self.to_s)
+  end
+
+  def steal_solution(source)
+    initialize_cells(source.to_s)        
+  end
+
+  def try_harder
+    blank_cell = @cells.reject(&:solved?).first
+    blank_cell.candidates.each do |candidate|
+      blank_cell.assume(candidate)
+      board = replicate!
+      board.solve!
+      steal_solution(board) and return if board.solved?
+    end
+  end
 	def solve_cell(cell)
-		search_all_candidates(cell)
+		update_candidates(cell)
 		cell.solve!
 	end
 
 	def solve
-		until solved?
+		count = 0
+		while !solved? || count <  SIZE * MAXENUM
 			cell = next_cell
 			if !cell.nil?
 				solve_cell(cell)
-			else
-				@solved = true
+				puts to_s
 			end
 		end
-		puts cells.map(&:value).inspect
+	end
+
+	def to_s
+		cells.map(&:value).join
 	end
 end
 	

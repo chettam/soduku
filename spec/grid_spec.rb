@@ -10,10 +10,6 @@ describe Grid do
 
 		context "should contain" do
 
-			it "cells" do
-				grid.cells.each {|cell| expect(cell).to instance_of(Cell)}
-			end 
-
 			it "81 cells" do
 				create_grid
 				expect(grid.cells.length).to eq(81)
@@ -21,16 +17,6 @@ describe Grid do
 		end
 
 		context "should know" do
-
-			it "if a grid is solved" do
-				expect(grid.solved?).to be_false
-			end
-
-			it "how to find the first unsolved cell" do
-				create_grid
-				expect(grid.next_cell).to be_kind_of Cell
-			end
-
 			it "to return nil if there is no unsolved cell" do
 				grid.create('1')
 				expect(grid.next_cell).to be_nil
@@ -65,14 +51,14 @@ describe Grid do
 			it "how to find the minimum amount of candidats for a sell" do
 				create_grid
 				cell = grid.next_cell
-				grid.search_all_candidates(cell)
+				grid.update_candidates(cell)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to solve individual cell" do
 				create_grid
 				cell = grid.next_cell
-				grid.search_all_candidates(cell)
+				grid.update_candidates(cell)
 				grid.solve_cell(cell)
 				expect(cell.filled_out?).to be_true
 			end
@@ -95,8 +81,18 @@ describe Grid do
 			it "how to solve an easy soduku" do
 				grid.create('015003002000100906270068430490002017501040380003905000900081040860070025037204600')
 				grid.solve
-				expect(grid.cells.map(&:value).join).to eq('615493872348127956279568431496832517521746389783915264952681743864379125137254698')
+				expect(grid.to_s).to eq('615493872348127956279568431496832517521746389783915264952681743864379125137254698')
 			end
+
+			xit "how to solve an hard soduku" do
+				#seed = (1..9).to_a.shuffle + Array.new(81-9, 0)
+				 seed = ((1..9).to_a + Array.new(81-9, 0)).shuffle
+				# seed = "800000000003600000070090200050007000000045700000100030001000068008500010090000400"
+				grid.create(seed.join)
+				grid.solve
+			  expect(grid.solved?).to be_true
+			end
+
 		end
 		def create_grid
 			# grid.create('015003002000100906270068430490002017501040380003905000900081040860070025037204600')
