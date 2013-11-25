@@ -1,7 +1,9 @@
+require 'pry-byebug'
+
 class Grid
 
 		SIZE = 81
-		MAXENUM = 6
+		MAXENUM = 10
 		attr_reader :cells
 
 	def initialize
@@ -14,10 +16,10 @@ class Grid
 		@cells.all? {|cell| cell.filled_out? }
 	end
 
-	def create(puzzle)	
+	def create(puzzle)
+		@cells = []
 		puzzle.chars.each_with_index do |number, index|
-			cell = Cell.new(number.to_i,index)
-			cells << cell	
+			@cells << Cell.new(number.to_i,index)
 		end
 	end
 
@@ -53,22 +55,31 @@ class Grid
 
 
   def replicate!
-    self.class.new(self.to_s)
+    grid =Grid.new
+    grid.create(self.to_s)
+    grid
   end
 
   def steal_solution(source)
-    initialize_cells(source.to_s)        
+    create(source.to_s)
+    puts "creating"      
   end
 
-  def try_harder
-    blank_cell = @cells.reject(&:solved?).first
+  def plan_b
+    blank_cell = @cells.reject(&:filled_out?).first
+    puts blank_cell.candidates.count
     blank_cell.candidates.each do |candidate|
       blank_cell.assume(candidate)
-      board = replicate!
-      board.solve!
-      steal_solution(board) and return if board.solved?
+      grid = replicate!
+      grid.solve
+      if grid.solved?
+		    steal_solution(grid.to_s)
+		    return true
+	  	end
     end
+    nil
   end
+
 	def solve_cell(cell)
 		update_candidates(cell)
 		cell.solve!
@@ -76,12 +87,17 @@ class Grid
 
 	def solve
 		count = 0
-		while !solved? || count <  SIZE * MAXENUM
+		while !solved? && count <  SIZE * MAXENUM
 			cell = next_cell
 			if !cell.nil?
 				solve_cell(cell)
-				puts to_s
 			end
+			count += 1
+		end
+		if !solved?
+			puts "going to plan B"
+		  plan_b
+    	# binding.pry if r
 		end
 	end
 

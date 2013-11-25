@@ -30,6 +30,10 @@ class Cell
   	@candidates.delete(number)
   end
 
+  def assume(value)
+    @value = value
+  end
+
   def solve!
   	@value = @candidates.delete(@candidates.first) if @candidates.length == 1
   end

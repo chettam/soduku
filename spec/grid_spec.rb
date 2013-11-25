@@ -84,11 +84,11 @@ describe Grid do
 				expect(grid.to_s).to eq('615493872348127956279568431496832517521746389783915264952681743864379125137254698')
 			end
 
-			xit "how to solve an hard soduku" do
+			it "how to solve an hard soduku" do
 				#seed = (1..9).to_a.shuffle + Array.new(81-9, 0)
-				 seed = ((1..9).to_a + Array.new(81-9, 0)).shuffle
+				seed = ((1..9).to_a + Array.new(81-9, 0)).shuffle.join
 				# seed = "800000000003600000070090200050007000000045700000100030001000068008500010090000400"
-				grid.create(seed.join)
+				grid.create(seed)
 				grid.solve
 			  expect(grid.solved?).to be_true
 			end
