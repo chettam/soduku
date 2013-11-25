@@ -17,8 +17,7 @@ class Grid
 
 	def create(puzzle)	
 		puzzle.chars.each_with_index do |number, index|
-			cell = build_cell_with(number.to_i)
-			assign_position(cell,index)
+			cell = Cell.new(number.to_i,index)
 			cells << cell	
 		end
 	end
@@ -40,23 +39,7 @@ class Grid
 	 	cells.select {|cell| !cell.filled_out? }.sample
 	 end
 
-	def calculate_position_x(index)
-		(index % LENGTH)
-	end
-	
-	def calculate_position_y(index)
-		(index / LENGTH)
-	end
 
-	def calculate_position_box(index)
-		(calculate_position_x(index) / BOX_LENGTH ) + (calculate_position_y(index) / BOX_LENGTH ) * BOX_LENGTH
-	end
-
-	def assign_position(cell,index)
-			cell.position[:x] = calculate_position_x(index)
-			cell.position[:y] = calculate_position_y(index)
-			cell.position[:box] = calculate_position_box(index)
-	end
 
 	def search_all_candidates(origin_cell)
 			horizontal_candidates_for(origin_cell)
