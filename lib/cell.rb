@@ -1,11 +1,14 @@
 class Cell
 
+  LENGTH = 9
+  
 	attr_reader :value , :candidates
 	attr_accessor :position
 
 	def initialize(value= nil)
 		@value = value
 		@candidates = []
+    initial_candidates
 		@position = {}
 	end
 
@@ -31,6 +34,11 @@ class Cell
 
   def same_position_as?(other, direction)
   	self.position[direction] == other.position[direction]
+  end
+
+  def initial_candidates
+    # WFT MEANS N?!?!?!?
+    (1..LENGTH).each {|n| candidates << n}  if candidates == []
   end
 
 end

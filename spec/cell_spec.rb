@@ -18,8 +18,7 @@ describe Cell do
 		end
 
 		it "potential candidates" do
-			cell.candidates = 2
-			expect(cell.candidates).to eq([2])
+			expect(cell.candidates).to eq([1,2,3,4,5,6,7,8,9])
 		end
 
 		it " cell and box position" do
@@ -40,10 +39,8 @@ describe Cell do
 		end
 
 		it "how to remove a candidate" do
-			cell.candidates = 2
-			cell.candidates = 3
 			cell.remove_candidate(2)
-			expect(cell.candidates).to eq([3])
+			expect(cell.candidates).to eq([1,3,4,5,6,7,8,9])
 		end
 
 		it "how to fill out a cell" do

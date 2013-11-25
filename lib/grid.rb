@@ -78,7 +78,6 @@ class Grid
 	end
 
 	def search_candidates(origin_cell,area)
-		get_initial_candidates(origin_cell)
 		 cells.each do |cell| 
 		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
 		 			origin_cell.candidates.delete(cell.value)
@@ -86,10 +85,7 @@ class Grid
 		 end
 	end
 
-	def get_initial_candidates(origin_cell)
-		# WFT MEANS N?!?!?!?
-		(1..LENGTH).each {|n| origin_cell.candidates << n}  if origin_cell.candidates == []
-	end
+	
 
 
 	def solve_cell(cell)
