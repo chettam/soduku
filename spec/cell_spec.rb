@@ -2,6 +2,7 @@ require_relative '../lib/cell'
 
 describe Cell do
 	let(:cell) {Cell.new}
+	let(:grid) {Grid.new}
 	context "should contain" do
 		
 		it "nil when empty" do
@@ -49,6 +50,30 @@ describe Cell do
 			expect(cell.filled_out?)
 		end
 
-	end
+		it "how to find a cell candidate base on an horizontal row" do
+				create_grid
+				cell = grid.next_cell
+				cell.horizontal_candidates_for(grid)
+				expect(cell.candidates).to eq([6])
+			end
+
+			it "how to find a cell candidate base on an vertical row" do
+				create_grid
+				cell = grid.next_cell
+				cell.vertical_candidates_for(grid)
+				expect(cell.candidates).to eq([6])
+			end
+
+			it "how to find a cell candidate base on a box" do
+				create_grid
+				cell = grid.next_cell
+				cell.box_candidates_for(grid)
+				expect(cell.candidates).to eq([6])
+			end
+		end
+		def create_grid
+			# grid.create('015003002000100906270068430490002017501040380003905000900081040860070025037204600')
+			grid.create('015493872348127956279568431496832517521746389783915264952681743864379125137254698')
+		end
 
 end

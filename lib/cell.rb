@@ -65,4 +65,35 @@ class Cell
       position[:box] = position_box(index)
   end
 
+    def update_candidates(grid)
+      horizontal_candidates_for(grid)
+      vertical_candidates_for(grid)
+      box_candidates_for(grid)
+  end
+
+  def horizontal_candidates_for(grid)   
+    update_candidates_for(grid,:x)
+  end
+
+  def vertical_candidates_for(grid)
+    update_candidates_for(grid,:y)
+  end
+
+  def box_candidates_for(grid) 
+    update_candidates_for(grid,:box)
+  end
+
+  def update_candidates_for(grid,area)
+     grid.cells.each do |cell| 
+        if cell.same_position_as?(self, area) && cell.filled_out?
+          self.remove_candidate(cell.value)
+        end       
+     end
+  end
+
+  def update(grid)
+    self.update_candidates(grid)
+    self.solve!
+  end
+
 end

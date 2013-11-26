@@ -25,31 +25,7 @@ class Grid
 	 	cells.select {|cell| !cell.filled_out? }.sample 	
 	end
 
-	def update_candidates(origin_cell)
-			horizontal_candidates_for(origin_cell)
-			vertical_candidates_for(origin_cell)
-			box_candidates_for(origin_cell)
-	end
 
-	def horizontal_candidates_for(cell)		
-		update_candidates_for(cell, :x)
-	end
-
-	def vertical_candidates_for(cell)		
-		update_candidates_for(cell, :y)
-	end
-
-	def box_candidates_for(cell)		
-		update_candidates_for(cell, :box)
-	end
-
-	def update_candidates_for(origin_cell,area)
-		 cells.each do |cell| 
-		 		if cell.same_position_as?(origin_cell, area) && cell.filled_out?
-		 			origin_cell.remove_candidate(cell.value)
-		 		end		 		
-		 end
-	end
 
 
   def replicate!
@@ -77,17 +53,14 @@ class Grid
 
   end
 
-	def solve_cell(cell)
-		update_candidates(cell)
-		cell.solve!
-	end
+	
 
 	def solve
 		count = 0
 		while !solved? && count <  SIZE * MAXENUM
 			cell = next_cell
 			if !cell.nil?
-				solve_cell(cell)
+				cell.update(self)
 			end
 			count += 1
 		end

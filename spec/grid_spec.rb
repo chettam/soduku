@@ -27,39 +27,19 @@ describe Grid do
 				expect(grid.next_cell.position).to eq({:x => 0 ,:y => 0 ,:box =>0})
 			end
 
-			it "how to find a cell candidate base on an horizontal row" do
-				create_grid
-				cell = grid.next_cell
-				grid.horizontal_candidates_for(cell)
-				expect(cell.candidates).to eq([6])
-			end
-
-			it "how to find a cell candidate base on an vertical row" do
-				create_grid
-				cell = grid.next_cell
-				grid.vertical_candidates_for(cell)
-				expect(cell.candidates).to eq([6])
-			end
-
-			it "how to find a cell candidate base on a box" do
-				create_grid
-				cell = grid.next_cell
-				grid.box_candidates_for(cell)
-				expect(cell.candidates).to eq([6])
-			end
+			
 
 			it "how to find the minimum amount of candidats for a sell" do
 				create_grid
 				cell = grid.next_cell
-				grid.update_candidates(cell)
+				cell.update_candidates(grid)
 				expect(cell.candidates).to eq([6])
 			end
 
 			it "how to solve individual cell" do
 				create_grid
 				cell = grid.next_cell
-				grid.update_candidates(cell)
-				grid.solve_cell(cell)
+				cell.update(grid)
 				expect(cell.filled_out?).to be_true
 			end
 
