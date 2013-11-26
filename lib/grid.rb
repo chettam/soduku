@@ -34,9 +34,8 @@ class Grid
     grid
   end
 
-  def steal_solution(source)
-    create(source.to_s)
-    puts "creating"      
+  def apply_solution_to_grid(source)
+    create(source.to_s)     
   end
 
   def plan_b
@@ -46,7 +45,7 @@ class Grid
       grid = replicate!
       grid.solve
       if grid.solved?
-		    steal_solution(grid.to_s)
+		    apply_solution_to_grid(grid.to_s)
 		    return
 	  	end
     end
@@ -66,7 +65,6 @@ class Grid
 		end
 		if !solved?
 		  plan_b
-    	# binding.pry if r
 		end
 	end
 
