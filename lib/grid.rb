@@ -1,104 +1,71 @@
 class Grid
 
-	LENGTH = 9
-	BOX_LENGTH = 3
+		SIZE = 81
+		MAXENUM = 10
+		attr_reader :cells
 
 	attr_reader :cells
 
 	def initialize
 		@cells =[]
 		@solved = false
-		@last_cell = Cell.new
 	end
 
 	def solved?
-		@solved
+		@cells.all? {|cell| cell.filled_out? }
 	end
 
-	def create(puzzle)	
+	def create(puzzle)
+		@cells = []
 		puzzle.chars.each_with_index do |number, index|
-			cell = Cell.new number.to_i
-			assign_position(cell,index)
-			cells << cell	
+			@cells << Cell.new(number.to_i,index)
 		end
 	end
 
-  def search_next_cell
-	 	@last_cell = select_cell_unless_last(select_next_cell)
-	 end
-
-	 def select_cell_unless_last(cell)
-	 	@last_cell == cell ? select_next_cell : cell
-	 	cell
-	 end
-
-	 def select_next_cell 
-	 	cells.select {|cell| !cell.filled_out? }.sample
-	 end
-
-	def calculate_position_x(index)
-		(index % LENGTH)
-	end
-	
-	def calculate_position_y(index)
-		(index / LENGTH)
+	def next_cell 
+	 	cells.select {|cell| !cell.filled_out? }.sample 	
 	end
 
-	def calculate_position_box(index)
-		(calculate_position_x(index) / BOX_LENGTH ) + (calculate_position_y(index) / BOX_LENGTH ) * BOX_LENGTH
-	end
+  def replicate!
+    grid =Grid.new
+    grid.create(self.to_s)
+    grid
+  end
 
-	def assign_position(cell,index)
-			cell.position[:x] = calculate_position_x(index)
-			cell.position[:y] = calculate_position_y(index)
-			cell.position[:box] = calculate_position_box(index)
-	end
+  def apply_solution_to_grid(source)
+    create(source.to_s)     
+  end
 
-	def search_all_candidates(origin_cell)
-			horizontal_candidates_for(origin_cell)
-			vertical_candidates_for(origin_cell)
-			box_candidates_for(origin_cell)
-	end
+  def plan_b
+    blank_cell = @cells.reject(&:filled_out?).first
+    blank_cell.candidates.each do |candidate|
+      blank_cell.assume(candidate)
+      grid = replicate!
+      grid.solve
+      if grid.solved?
+		    apply_solution_to_grid(grid.to_s)
+		    return
+	  	end
+    end
 
-
-	def horizontal_candidates_for(cell)		
-		search_candidates(cell, :x)
-	end
-
-	def vertical_candidates_for(cell)		
-		search_candidates(cell, :y)
-	end
-
-	def box_candidates_for(cell)		
-		search_candidates(cell, :box)
-	end
-
-	def search_candidates(origin_cell,area)
-		cells.each do |cell| 
-				if cell.same_position_as?(origin_cell, area) && cell.filled_out?
-					origin_cell.remove_candidate(cell.value)
-				end		 		
-		end
-	end
-
-
-
-
-	def solve_cell(cell)
-		search_all_candidates(cell)
-		cell.solve!
-	end
+  end
 
 	def solve
-		until solved?
-			cell = search_next_cell
+		count = 0
+		while !solved? && count <  SIZE * MAXENUM
+			cell = next_cell
 			if !cell.nil?
-				solve_cell(cell)
-			else
-				@solved = true
+				cell.update(self)
 			end
+			count += 1
 		end
-		puts cells.map(&:value).inspect
+		if !solved?
+		  plan_b
+		end
+	end
+
+	def to_s
+		cells.map(&:value).join
 	end
 end
 	
